@@ -173,7 +173,7 @@ npm start
 
 ### Backend Tests
 ```bash
-cd backend/src/Fundo.Services.Tests
+cd backend/src
 dotnet test
 ```
 
