@@ -1,33 +1,114 @@
-<main class="loans">
-  <section class="loans--container">
-    <h1>Loan Management</h1>
-    <table mat-table [dataSource]="loans" class="mat-elevation-z8">
-      <ng-container matColumnDef="loanAmount">
-        <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.loanAmount | currency }}
-        </td>
-      </ng-container>
+<!-- Login Screen -->
+<app-login *ngIf="!isAuthenticated"></app-login>
 
-      <ng-container matColumnDef="currentBalance">
-        <th mat-header-cell *matHeaderCellDef>Current Balance</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.currentBalance | currency }}
-        </td>
-      </ng-container>
+<!-- Main Application -->
+<div *ngIf="isAuthenticated" class="app-container">
+  <!-- Header -->
+  <mat-toolbar color="primary" class="app-header">
+    <span>Loan Management System</span>
+    <span class="spacer"></span>
+    
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu">
+      <div class="user-info" mat-menu-item disabled>
+        <div class="user-name">{{currentUser?.firstName}} {{currentUser?.lastName}}</div>
+        <div class="user-role">{{currentUser?.role}}</div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
 
-      <ng-container matColumnDef="applicant">
-        <th mat-header-cell *matHeaderCellDef>Applicant</th>
-        <td mat-cell *matCellDef="let element">{{ element.applicant }}</td>
-      </ng-container>
+  <!-- Content -->
+  <div class="content-container">
+    <div class="page-header">
+      <h1>Loan Management</h1>
+      <button mat-raised-button color="primary" (click)="loadLoans()" [disabled]="isLoading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let element">{{ element.status }}</td>
-      </ng-container>
+    <!-- Error State -->
+    <div *ngIf="error" class="error-container">
+      <p class="error-message">{{ error }}</p>
+      <button mat-button color="primary" (click)="loadLoans()">Retry</button>
+    </div>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </section>
-</main>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading loans...</p>
+    </div>
+
+    <!-- Loans Table -->
+    <div *ngIf="!isLoading && !error" class="table-container">
+      <table mat-table [dataSource]="loans" class="loans-table">
+        <!-- Loan Amount Column -->
+        <ng-container matColumnDef="loanAmount">
+          <th mat-header-cell *matHeaderCellDef>Loan Amount</th>
+          <td mat-cell *matCellDef="let loan">${{ loan.amount | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <!-- Current Balance Column -->
+        <ng-container matColumnDef="currentBalance">
+          <th mat-header-cell *matHeaderCellDef>Current Balance</th>
+          <td mat-cell *matCellDef="let loan">${{ loan.currentBalance | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <!-- Applicant Column -->
+        <ng-container matColumnDef="applicant">
+          <th mat-header-cell *matHeaderCellDef>Applicant</th>
+          <td mat-cell *matCellDef="let loan">{{ loan.applicantName }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let loan">
+            <span class="status-badge" [class]="'status-' + loan.status">
+              {{ loan.status | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let loan">
+            <div class="action-buttons" *ngIf="loan.status === 'active' && loan.currentBalance > 0">
+              <button mat-button color="primary" (click)="quickPayment(loan, 25)">
+                Pay 25%
+              </button>
+              <button mat-button color="primary" (click)="quickPayment(loan, 50)">
+                Pay 50%
+              </button>
+              <button mat-button color="accent" (click)="quickPayment(loan, 100)">
+                Pay All
+              </button>
+            </div>
+            <span *ngIf="loan.status === 'paid'" class="paid-label">
+              Fully Paid
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- No Data State -->
+      <div *ngIf="loans.length === 0" class="no-data">
+        <mat-icon>description</mat-icon>
+        <h3>No loans found</h3>
+        <p>There are currently no loans in the system.</p>
+      </div>
+    </div>
+  </div>
+</div>

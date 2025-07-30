@@ -5,28 +5,340 @@
   justify-content: center;
   text-align: center;
   padding: 20px;
+  min-height: 100vh;
+  background-color: #f5f5f5;
 
   &--container {
-    width: 60%;
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 300;
   }
 }
 
+// Loading spinner styles
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+// Error message styles
+.error-container {
+  padding: 20px;
+  text-align: center;
+
+  .error-message {
+    color: #f44336;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+}
+
+// Table styles
 .mdc-data-table {
+  width: 100%;
+
   &__table {
     margin-top: 20px;
     border: 1px solid #dee5ed;
     border-radius: 4px;
+    width: 100%;
   }
 
   &__header-cell {
     color: #7b8187;
+    font-weight: 600;
+  }
+
+  &__cell {
+    padding: 16px;
   }
 }
 
+// Status badge styles
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &.status-active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+
+  &.status-paid {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+  }
+}
+
+// Action buttons styles
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .payment-btn {
+    min-width: 80px;
+    font-size: 12px;
+  }
+}
+
+.paid-label {
+  color: #2e7d32;
+  font-weight: 500;
+  font-style: italic;
+}
+
+// Empty state styles
+.empty-state {
+  padding: 40px;
+  color: #666;
+  font-style: italic;
+}
+
+// Snackbar styles
+::ng-deep {
+  .success-snackbar {
+    .mat-mdc-snack-bar-container {
+      background-color: #4caf50;
+      color: white;
+    }
+  }
+
+  .error-snackbar {
+    .mat-mdc-snack-bar-container {
+      background-color: #f44336;
+      color: white;
+    }
+  }
+}
+
+// Responsive design
 @media (max-width: 992px) {
   .loans {
     &--container {
+      width: 95%;
+      padding: 15px;
+    }
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    
+    .payment-btn {
       width: 100%;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .loans {
+    padding: 10px;
+    
+    &--container {
+      width: 100%;
+      padding: 10px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  .mdc-data-table {
+    &__table {
+      font-size: 14px;
+    }
+
+    &__cell {
+      padding: 8px 4px;
+    }
+  }
+
+  .action-buttons {
+    .payment-btn {
+      font-size: 11px;
+      padding: 4px 8px;
+      min-width: 60px;
+    }
+  }
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+.content-container {
+  flex: 1;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0;
+    color: #333;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.user-info {
+  padding: 8px 16px !important;
+  cursor: default !important;
+
+  .user-name {
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .user-role {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+  }
+}
+
+.error-container {
+  text-align: center;
+  padding: 48px 24px;
+  
+  .error-message {
+    color: #f44336;
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.table-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.loans-table {
+  width: 100%;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &.status-active {
+    background-color: #e8f5e8;
+    color: #2e7d32;
+  }
+
+  &.status-paid {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.paid-label {
+  color: #666;
+  font-style: italic;
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px 24px;
+  color: #666;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    margin: 0 0 8px 0;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .content-container {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    flex-direction: column;
   }
 }

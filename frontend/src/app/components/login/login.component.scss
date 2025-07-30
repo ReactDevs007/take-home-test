@@ -1,0 +1,75 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.login-card {
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-button {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+
+  .mat-spinner {
+    margin-right: 8px;
+  }
+}
+
+.test-accounts {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+
+  h4 {
+    margin: 0 0 16px 0;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+
+.test-buttons {
+  display: flex;
+  gap: 8px;
+
+  button {
+    flex: 1;
+    font-size: 12px;
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-card {
+    margin: 0;
+  }
+
+  .test-buttons {
+    flex-direction: column;
+  }
+} 
