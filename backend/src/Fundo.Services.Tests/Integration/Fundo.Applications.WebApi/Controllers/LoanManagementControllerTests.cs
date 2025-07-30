@@ -18,11 +18,21 @@ namespace Fundo.Services.Tests.Integration
         }
 
         [Fact]
-        public async Task GetBalances_ShouldReturnExpectedResult()
+        public async Task GetAllLoans_WithoutAuth_ShouldReturnUnauthorized()
         {
-            var response = await _client.GetAsync("/loan");
+            // Test without authentication should return 401 Unauthorized
+            var response = await _client.GetAsync("/api/LoanManagement/loans");
 
-            Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetSpecificLoan_WithoutAuth_ShouldReturnUnauthorized()
+        {
+            // Test without authentication should return 401 Unauthorized
+            var response = await _client.GetAsync("/api/LoanManagement/loans/1");
+
+            Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
         }
     }
 }
