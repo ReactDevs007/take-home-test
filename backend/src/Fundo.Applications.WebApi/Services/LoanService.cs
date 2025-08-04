@@ -45,6 +45,7 @@ namespace Fundo.Applications.WebApi.Services
             _context.Loans.Add(loan);
             await _context.SaveChangesAsync();
 
+            // Create and save history record
             var history = new LoanHistory
             {
                 LoanId = loan.Id,
@@ -56,6 +57,9 @@ namespace Fundo.Applications.WebApi.Services
                 SnapshotDate = DateTime.UtcNow,
                 ChangeType = "created"
             };
+
+            _context.LoanHistories.Add(history);
+            await _context.SaveChangesAsync();
 
             return MapToResponse(loan);
         }
@@ -80,6 +84,7 @@ namespace Fundo.Applications.WebApi.Services
                 throw new InvalidOperationException("Payment amount cannot exceed current balance");
             }
 
+            var oldBalance = loan.CurrentBalance;
             loan.CurrentBalance -= request.Amount;
             loan.UpdatedAt = DateTime.UtcNow;
 
@@ -88,6 +93,23 @@ namespace Fundo.Applications.WebApi.Services
                 loan.Status = "paid";
             }
 
+            await _context.SaveChangesAsync();
+
+            // Create payment history record
+            var history = new LoanHistory
+            {
+                LoanId = loan.Id,
+                Amount = loan.Amount,
+                ApplicantName = loan.ApplicantName,
+                Status = loan.Status,
+                CreatedAt = loan.CreatedAt,
+                UpdatedAt = loan.UpdatedAt,
+                SnapshotDate = DateTime.UtcNow,
+                ChangeType = "payment",
+                PaymentAmount = request.Amount
+            };
+
+            _context.LoanHistories.Add(history);
             await _context.SaveChangesAsync();
 
             return MapToResponse(loan);

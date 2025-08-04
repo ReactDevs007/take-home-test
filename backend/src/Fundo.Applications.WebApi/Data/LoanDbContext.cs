@@ -139,6 +139,7 @@ namespace Fundo.Applications.WebApi.Data
                 new LoanHistory
                 {
                     Id = 1,
+                    LoanId = 1,
                     Amount = 25000.00m,
                     ApplicantName = "John Doe",
                     Status = "active",
@@ -150,35 +151,40 @@ namespace Fundo.Applications.WebApi.Data
                 new LoanHistory
                 {
                     Id = 2,
+                    LoanId = 2,
                     Amount = 25000.00m,
                     ApplicantName = "John Doe",
                     Status = "active",
                     CreatedAt = DateTime.UtcNow.AddDays(-30),
                     UpdatedAt = DateTime.UtcNow.AddDays(-5),
                     SnapshotDate = DateTime.UtcNow.AddDays(-10),
-                    ChangeType = "created"
+                    ChangeType = "payment",
+                    PaymentAmount = 6250.00m
                 },
                 new LoanHistory
                 {
                     Id = 3,
-                    Amount = 25000.00m,
-                    ApplicantName = "John Doe",
-                    Status = "active",
-                    CreatedAt = DateTime.UtcNow.AddDays(-30),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
-                    SnapshotDate = DateTime.UtcNow.AddDays(-20),
+                    LoanId = 2,
+                    Amount = 15000.00m,
+                    ApplicantName = "Jane Smith",
+                    Status = "paid",
+                    CreatedAt = DateTime.UtcNow.AddDays(-60),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-10),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-60),
                     ChangeType = "created"
                 },
                 new LoanHistory
                 {
                     Id = 4,
-                    Amount = 25000.00m,
-                    ApplicantName = "John Doe",
-                    Status = "active",
-                    CreatedAt = DateTime.UtcNow.AddDays(-30),
-                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
-                    SnapshotDate = DateTime.UtcNow.AddDays(-20),
-                    ChangeType = "created"
+                    LoanId = 2,
+                    Amount = 15000.00m,
+                    ApplicantName = "Jane Smith",
+                    Status = "paid",
+                    CreatedAt = DateTime.UtcNow.AddDays(-60),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-10),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-10),
+                    ChangeType = "payment",
+                    PaymentAmount = 15000.00m
                 }
             );
         }

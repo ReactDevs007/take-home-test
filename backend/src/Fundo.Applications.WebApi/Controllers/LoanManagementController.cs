@@ -135,5 +135,39 @@ namespace Fundo.Applications.WebApi.Controllers
                 return StatusCode(500, "An error occurred while processing the payment");
             }
         }
+
+        /// <param name="id">Loan ID</param>
+        /// <returns>Loan history</returns>
+        [HttpGet("loans/{id}/history")]
+        public async Task<ActionResult<IEnumerable<LoanHistoryResponse>>> GetLoanHistory(int id)
+        {
+            try
+            {
+                var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                var username = User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value;
+                
+                _logger.LogInformation("User {UserId} ({Username}) requested history for loan {LoanId}", userId, username, id);
+                
+                // First check if the loan exists
+                var loan = await _loanService.GetLoanByIdAsync(id);
+                if (loan == null)
+                {
+                    _logger.LogWarning("Loan history requested for non-existent loan {LoanId} by user {UserId}", id, userId);
+                    return NotFound($"Loan with ID {id} not found");
+                }
+                
+                var history = await _loanService.GetLoanHistoryAsync(id);
+                
+                _logger.LogInformation("Successfully retrieved {HistoryCount} history records for loan {LoanId} for user {UserId}", 
+                    history.Count(), id, userId);
+                
+                return Ok(history);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving loan history for loan {LoanId}", id);
+                return StatusCode(500, "An error occurred while retrieving the loan history");
+            }
+        }
     }
 }

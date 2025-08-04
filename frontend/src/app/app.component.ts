@@ -70,7 +70,6 @@ export class AppComponent implements OnInit {
       this.isAuthenticated = !!token;
       if (this.isAuthenticated) {
         this.loadLoans();
-        this.loadLoanHistory();
       } else {
         this.loans = [];
       }
@@ -88,6 +87,7 @@ export class AppComponent implements OnInit {
     this.loanService.getAllLoans().subscribe({
       next: (loans) => {
         this.loans = loans;
+        this.loadLoanHistory();
         this.isLoading = false;
       },
       error: (error) => {
@@ -103,18 +103,25 @@ export class AppComponent implements OnInit {
     this.historyLoading = true;
     this.historyError = null;
     
-    this.loanService.getLoanHistory(1).subscribe({
-      next: (history) => {
-        this.loanHistory = history;
-        this.historyLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading loan history:', error);
-        this.historyError = 'Failed to load loan history. Please try again.';
-        this.historyLoading = false;
-        this.showError('Failed to load loan history');
-      }
-    });
+    // Get the first loan's history if loans exist
+    if (this.loans.length > 0) {
+      this.loanService.getLoanHistory(2).subscribe({
+        next: (history) => {
+          console.log('Loan history:', history);
+          this.loanHistory = history;
+          this.historyLoading = false;
+        },
+        error: (error) => {
+          console.error('Error loading loan history:', error);
+          this.historyError = 'Failed to load loan history. Please try again.';
+          this.historyLoading = false;
+          this.showError('Failed to load loan history');
+        }
+      });
+    } else {
+      this.loanHistory = [];
+      this.historyLoading = false;
+    }
   }
 
   logout(): void {
