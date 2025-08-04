@@ -8,7 +8,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { LoanService, Loan } from './services/loan.service';
+import { LoanService, Loan, LoanHistory } from './services/loan.service';
 import { AuthService, AuthResponse } from './services/auth.service';
 import { LoginComponent } from './components/login/login.component';
 
@@ -38,12 +38,25 @@ export class AppComponent implements OnInit {
     'status',
     'actions'
   ];
+
+  historyDisplayedColumns: string[] = [
+    'loanAmount',
+    'applicant',
+    'status',
+    'snapshotDate',
+    'changeType',
+    'paymentAmount'
+  ]
   
   loans: Loan[] = [];
   isLoading = false;
   error: string | null = null;
   isAuthenticated = false;
   currentUser: AuthResponse | null = null;
+
+  loanHistory: LoanHistory[] = [];
+  historyLoading = false;
+  historyError: string | null = null;
 
   constructor(
     private loanService: LoanService,
@@ -57,6 +70,7 @@ export class AppComponent implements OnInit {
       this.isAuthenticated = !!token;
       if (this.isAuthenticated) {
         this.loadLoans();
+        this.loadLoanHistory();
       } else {
         this.loans = [];
       }
@@ -81,6 +95,24 @@ export class AppComponent implements OnInit {
         this.error = 'Failed to load loans. Please try again.';
         this.isLoading = false;
         this.showError('Failed to load loans');
+      }
+    });
+  }
+
+  loadLoanHistory () {
+    this.historyLoading = true;
+    this.historyError = null;
+    
+    this.loanService.getLoanHistory(1).subscribe({
+      next: (history) => {
+        this.loanHistory = history;
+        this.historyLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading loan history:', error);
+        this.historyError = 'Failed to load loan history. Please try again.';
+        this.historyLoading = false;
+        this.showError('Failed to load loan history');
       }
     });
   }
@@ -128,5 +160,9 @@ export class AppComponent implements OnInit {
       duration: 5000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleString();
   }
 }

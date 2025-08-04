@@ -11,5 +11,7 @@ namespace Fundo.Applications.WebApi.Services
         Task<LoanResponse?> GetLoanByIdAsync(int id);
         Task<LoanResponse> CreateLoanAsync(CreateLoanRequest request);
         Task<LoanResponse?> MakePaymentAsync(int id, PaymentRequest request);
+
+        Task<IEnumerable<LoanHistoryResponse>> GetLoanHistoryAsync(int loanId);
     }
 } 

@@ -45,8 +45,22 @@ namespace Fundo.Applications.WebApi.Services
             _context.Loans.Add(loan);
             await _context.SaveChangesAsync();
 
+            var history = new LoanHistory
+            {
+                LoanId = loan.Id,
+                Amount = loan.Amount,
+                ApplicantName = loan.ApplicantName,
+                Status = loan.Status,
+                CreatedAt = loan.CreatedAt,
+                UpdatedAt = loan.UpdatedAt,
+                SnapshotDate = DateTime.UtcNow,
+                ChangeType = "created"
+            };
+
             return MapToResponse(loan);
         }
+
+
 
         public async Task<LoanResponse?> MakePaymentAsync(int id, PaymentRequest request)
         {
@@ -91,6 +105,32 @@ namespace Fundo.Applications.WebApi.Services
                 CreatedAt = loan.CreatedAt,
                 UpdatedAt = loan.UpdatedAt
             };
+        }
+
+         private static LoanHistoryResponse MapToHistoryResponse(LoanHistory history)
+        {
+            return new LoanHistoryResponse
+            {
+                Id = history.Id,
+                Amount = history.Amount,
+                ApplicantName = history.ApplicantName,
+                Status = history.Status,
+                CreatedAt = history.CreatedAt,
+                UpdatedAt = history.UpdatedAt,
+                SnapshotDate = history.SnapshotDate,
+                ChangeType = history.ChangeType,
+                PaymentAmount = history.PaymentAmount
+            };
+        }
+
+        public async Task<IEnumerable<LoanHistoryResponse>> GetLoanHistoryAsync(int loanId)
+        {
+            var histories = await _context.LoanHistories
+                .Where(lh => lh.LoanId == loanId)
+                .OrderByDescending(lh => lh.SnapshotDate)
+                .ToListAsync();
+
+            return histories.Select(MapToHistoryResponse);
         }
     }
 } 

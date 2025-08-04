@@ -14,6 +14,19 @@ export interface Loan {
   updatedAt: string;
 }
 
+export interface LoanHistory {
+  id: number;
+  loanId: number;
+  amount: number;
+  applicantName: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  snapshotDate: string;
+  changeType: string;
+  paymentAmount?: number;
+}
+
 export interface CreateLoanRequest {
   amount: number;
   applicantName: string;
@@ -62,6 +75,12 @@ export class LoanService {
 
   makePayment(id: number, request: PaymentRequest): Observable<Loan> {
     return this.http.post<Loan>(`${this.apiUrl}/loans/${id}/payment`, request, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getLoanHistory(id: number): Observable<LoanHistory[]> {
+    return this.http.get<LoanHistory[]>(`${this.apiUrl}/loans/${id}/history`, {
       headers: this.getAuthHeaders()
     });
   }

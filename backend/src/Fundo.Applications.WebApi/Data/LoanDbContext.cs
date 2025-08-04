@@ -13,6 +13,7 @@ namespace Fundo.Applications.WebApi.Data
 
         public DbSet<Loan> Loans { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<LoanHistory> LoanHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -130,6 +131,54 @@ namespace Fundo.Applications.WebApi.Data
                     Status = "active",
                     CreatedAt = DateTime.UtcNow.AddDays(-7),
                     UpdatedAt = DateTime.UtcNow.AddDays(-1)
+                }
+            );
+
+            // Seed loan histories
+            modelBuilder.Entity<LoanHistory>().HasData(
+                new LoanHistory
+                {
+                    Id = 1,
+                    Amount = 25000.00m,
+                    ApplicantName = "John Doe",
+                    Status = "active",
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-20),
+                    ChangeType = "created"
+                },
+                new LoanHistory
+                {
+                    Id = 2,
+                    Amount = 25000.00m,
+                    ApplicantName = "John Doe",
+                    Status = "active",
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-10),
+                    ChangeType = "created"
+                },
+                new LoanHistory
+                {
+                    Id = 3,
+                    Amount = 25000.00m,
+                    ApplicantName = "John Doe",
+                    Status = "active",
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-20),
+                    ChangeType = "created"
+                },
+                new LoanHistory
+                {
+                    Id = 4,
+                    Amount = 25000.00m,
+                    ApplicantName = "John Doe",
+                    Status = "active",
+                    CreatedAt = DateTime.UtcNow.AddDays(-30),
+                    UpdatedAt = DateTime.UtcNow.AddDays(-5),
+                    SnapshotDate = DateTime.UtcNow.AddDays(-20),
+                    ChangeType = "created"
                 }
             );
         }
